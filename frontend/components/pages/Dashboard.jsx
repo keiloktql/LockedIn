@@ -13,6 +13,8 @@ import { Progress } from "../ui/Progress";
 import { useRouter } from "next/router";
 import Stats from "../ui/Stats";
 import { Medal, CircleDollarSign, Banknote } from "lucide-react";
+import Link from "next/link";
+import { Badge } from "../ui/badge";
 
 const Dashboard = () => {
   const router = useRouter();
@@ -72,28 +74,31 @@ const Dashboard = () => {
       <span className="my-8">
         <span className="flex justify-between w-full">
           <H2>Your Goals</H2>
-          <Button onClick={() => router.push("/create-goal")}>
+          <Button onClick={() => router.push("/dashboard/create-goal")}>
             Create Goal
           </Button>
         </span>
 
         <span className="grid mt-4 grid-cols-2 gap-2">
-          <Card>
-            <CardHeader>
-              <CardTitle>I will quit smoking</CardTitle>
-              <CardDescription>Staked amount: S$300</CardDescription>
-              <span>
-                <Progress value={33} />
-                <span className="flex w-full justify-between">
-                  <P className="text-slate-500 text-sm">19 Dec, 2025</P>
-                  <P className="text-slate-500 text-sm">18 Jan, 2026</P>
+          <Link href={`/dashboard/goal/123hihwfiuh78912y3`}>
+            <Card>
+              <CardHeader>
+                <CardTitle>I will quit smoking</CardTitle>
+                <CardDescription>Staked amount: S$300</CardDescription>
+                <span>
+                  <Progress value={33} />
+                  <span className="flex w-full justify-between">
+                    <P className="text-slate-500 text-sm">19 Dec, 2025</P>
+                    <P className="text-slate-500 text-sm">18 Jan, 2026</P>
+                  </span>
                 </span>
-              </span>
-              <CardDescription>
-                Beneficiary: Singapore Cancer Society
-              </CardDescription>
-            </CardHeader>
-          </Card>
+                <CardDescription>
+                  Beneficiary: Singapore Cancer Society
+                </CardDescription>
+                <Badge className="w-fit">Completed</Badge>
+              </CardHeader>
+            </Card>
+          </Link>
         </span>
       </span>
     </MainLayout>

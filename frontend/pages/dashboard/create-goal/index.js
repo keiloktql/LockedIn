@@ -326,12 +326,12 @@ export default function Home() {
                 </Card>
               </div>
             </div>
-            <CardFooter className="flex justify-between mt-8">
+            <span className="flex gap-2 mt-8">
               <Button variant="outline" type="button">
                 Cancel
               </Button>
-              <Button type="submit">Deploy</Button>
-            </CardFooter>
+              <Button type="submit">Create Goal</Button>
+            </span>
           </form>
         </main>
       </div>

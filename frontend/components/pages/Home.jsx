@@ -3,10 +3,9 @@ import MainLayout from "@/components/layout/MainLayout";
 
 const Home = () => {
   return (
-    <MainLayout>
-      <div>
-        <h1>Home page</h1>
-      </div>
+    <MainLayout className="flex flex-col pb-20 justify-center items-center w-full mx-auto px-6">
+      <h1 className="text-[32px] font-bold">LockedIn</h1>
+      <p></p>
     </MainLayout>
   );
 };
