@@ -169,7 +169,7 @@ export default async function handler(req, res) {
       quoteId: quote.id
     });
 
-    return res.status(201).json({ message: 'Goal created successfully' });
+    return res.status(201).json({ message: 'Goal created successfully', redirect_url: outgoingPaymentGrant.interact.redirect });
   } catch (error) {
     console.error(error);
     return res.status(500).json({ error: 'Internal server error' });
