@@ -24,7 +24,7 @@ const Dashboard = () => {
       <span className="mb-4">
         <H2>Hello, Le Le</H2>
         <P>It's time to lock in</P>
-        <span className="flex gap-2 mb-4 grid grid-cols-3">
+        <span className="gap-2 mb-4 grid grid-cols-3">
           <Stats
             title="Total Amt Staked"
             data="S$5,000"
