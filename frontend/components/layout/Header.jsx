@@ -14,9 +14,9 @@ const Header = () => {
         <nav className="w-full h-full justify-between items-center hidden md:flex">
           <Link
             className="font-semibold text-gray-600  hover:underline"
-            href="/faq"
+            href="/dashboard"
           >
-            FAQ
+            Dashboard
           </Link>
         </nav>
       </div>
