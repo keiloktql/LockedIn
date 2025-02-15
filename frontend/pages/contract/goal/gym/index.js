@@ -1,15 +1,19 @@
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
-import { z } from "zod";
-
+import { useForm, Controller } from "react-hook-form";
 import { toast } from "@/hooks/use-toast";
 import { Label } from "@/components/ui/Label";
 import { Button } from "@/components/ui/Button";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle
+} from "@/components/ui/Card";
+import {
   Form,
   FormControl,
-  FormDescription,
   FormField,
   FormItem,
   FormLabel,
@@ -28,22 +32,20 @@ const geistMono = Geist_Mono({
   subsets: ["latin"]
 });
 
-const FormSchema = z.object({
-  username: z.string().min(2, {
-    message: "Username must be at least 2 characters."
-  })
-});
-
 export default function Home() {
   const form = useForm({
-    resolver: zodResolver(FormSchema),
     defaultValues: {
-      username: ""
+      weight: "",
+      unit: "kg",
+      height: { cm: "", feet: "", inches: "" },
+      targetWeight: "", // Default value for target weight
+      targetWeeks: "", // Added for weeks input
+      commitmentStart: "" // Added for commitment start
     }
   });
 
   function onSubmit(data) {
-    toast({
+    console.log({
       title: "You submitted the following values:",
       description: (
         <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
@@ -62,49 +64,67 @@ export default function Home() {
           <h1 className="scroll-m-20 text-4xl font-extrabold tracking-tight lg:text-5xl">
             Maintain Weight
           </h1>
-          <p className="leading-7 [&:not(:first-child)]:mt-6">
+          <h3 className="leading-7 [&:not(:first-child)]:mt-6">
             Your privacy is important to us. You can adjust your privacy
-            settings once you’re done creating your Commitment Contract
-          </p>
+            settings once you’re done creating your Commitment Contract.
+          </h3>
         </div>
-        <div>
-          <Form {...form}>
-            <form
-              onSubmit={form.handleSubmit(onSubmit)}
-              className="w-2/3 space-y-6"
-            >
-              <div className="flex w-full max-w-sm items-center space-x-2">
-                <FormField
-                  control={form.control}
-                  name="username"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Username</FormLabel>
-                      <FormControl>
-                        <Input placeholder="shadcn" {...field} />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                <RadioGroup defaultValue="comfortable">
-                  <div className="flex items-center space-x-2">
-                    <RadioGroupItem value="default" id="r1" />
-                    <Label htmlFor="r1">Default</Label>
+        <div className="grid grid-cols-3 gap-8">
+          <div className="col-span-2">
+            <Card className="w-full">
+              <CardHeader>
+                <CardTitle>Create project</CardTitle>
+                <CardDescription>
+                  Deploy your new project in one-click.
+                </CardDescription>
+              </CardHeader>
+              <CardContent>
+                <form>
+                  <div className="grid w-full items-center gap-4">
+                    <div className="flex flex-col space-y-1.5">
+                      <Label htmlFor="name">Name</Label>
+                      <Input id="name" placeholder="Name of your project" />
+                    </div>
+                    <div className="flex flex-col space-y-1.5"></div>
                   </div>
-                  <div className="flex items-center space-x-2">
-                    <RadioGroupItem value="comfortable" id="r2" />
-                    <Label htmlFor="r2">Comfortable</Label>
-                  </div>
-                  <div className="flex items-center space-x-2">
-                    <RadioGroupItem value="compact" id="r3" />
-                    <Label htmlFor="r3">Compact</Label>
-                  </div>
-                </RadioGroup>
-              </div>
-              <Button type="submit">Submit</Button>
-            </form>
-          </Form>
+                </form>
+              </CardContent>
+              <CardFooter className="flex justify-between">
+                <Button variant="outline">Cancel</Button>
+                <Button>Deploy</Button>
+              </CardFooter>
+            </Card>
+          </div>
+          <div className="col-span-1">
+            <Card className="w-full">
+              <CardContent>
+                <div>
+                  <h2 className="scroll-m-20 text-1xl font-extrabold tracking-tight lg:text-2xl">
+                    Net Weight Loss:
+                  </h2>
+                  <p>1.6kg</p>
+                </div>
+                <div>
+                  <h2 className="scroll-m-20 text-1xl font-extrabold tracking-tight lg:text-2xl">
+                    Weekly Weight Loss:
+                  </h2>
+                  <p>0.4kg</p>
+                </div>
+              </CardContent>
+              <CardFooter>
+                <div>
+                  <h2 className="scroll-m-20 text-1xl font-extrabold tracking-tight lg:text-2xl">
+                    Report are due on
+                  </h2>
+                  <p>
+                    You are required to report weekly:
+                    <br />
+                    <b>Every Saturdays</b>
+                  </p>
+                </div>
+              </CardFooter>
+            </Card>
+          </div>
         </div>
       </main>
     </div>
