@@ -7,15 +7,7 @@ const Header = () => {
       <div className="m-auto flex h-full w-full max-w-screen-xl justify-between px-6 sm:px-16">
         {/* 1280px */}
         <div className="w-full items-center flex">
-          <Link
-            className={`text-black text-display-sm font-bold  ${
-              logoAnimation ? "shining-effect" : ""
-            }`}
-            href="/"
-            onClick={() => {
-              setLogoAnimation(true);
-            }}
-          >
+          <Link className={`text-black text-display-sm font-bold`} href="/">
             LockedIn
           </Link>
         </div>
