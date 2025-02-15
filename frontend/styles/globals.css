@@ -26,3 +26,7 @@ body {
     --radius: 0.5rem;
   }
 }
+
+#nprogress .bar {
+  background-color: #020617 !important;
+}
