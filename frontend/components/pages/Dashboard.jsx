@@ -6,12 +6,16 @@ import {
   CardDescription,
   CardHeader,
   CardTitle
-} from "@/components/ui/card";
+} from "@/components/ui/Card";
 import { Button } from "../ui/Button";
 import Image from "next/image";
-import { Progress } from "../ui/progress";
+import { Progress } from "../ui/Progress";
+import { useRouter } from "next/router";
+import Stats from "../ui/Stats";
+import { Medal, CircleDollarSign, Banknote } from "lucide-react";
 
 const Dashboard = () => {
+  const router = useRouter();
   return (
     <MainLayout
       title="Dashboard | LockedIn"
@@ -20,9 +24,26 @@ const Dashboard = () => {
       <span className="mb-4">
         <H2>Hello, Le Le</H2>
         <P>It's time to lock in</P>
+        <span className="gap-2 mb-4 grid grid-cols-3">
+          <Stats
+            title="Total Amt Staked"
+            data="S$5,000"
+            icon={<CircleDollarSign className="h-6 w-6 text-[#e4e4e7]" />}
+          />
+          <Stats
+            title="% of goals completed"
+            data="23"
+            icon={<Medal className="h-6 w-6 text-[#e4e4e7]" />}
+          />
+          <Stats
+            title="Total Amt Donated"
+            data="S$123"
+            icon={<Banknote className="h-6 w-6 text-[#e4e4e7]" />}
+          />
+        </span>
       </span>
 
-      <hr classname="h-px max-w-screen-xl bg-gray-200 border-0" />
+      <hr className="h-px max-w-screen-xl bg-gray-200 border-0" />
       <span className="my-8">
         <H2>Events</H2>
         <span className="grid mt-4 grid-cols-2 gap-2">
@@ -30,9 +51,9 @@ const Dashboard = () => {
             <CardHeader>
               <Image
                 className="w-full max-h-32 rounded-md object-cover"
-                src="/assets/event-hpb.jpg"
+                src="/assets/events-hpb.png"
                 width={250}
-                height={50}
+                height={100}
                 alt="image"
               />
               <CardTitle>HPB 'I quit' 28 Day Programme</CardTitle>
@@ -47,9 +68,15 @@ const Dashboard = () => {
         </span>
       </span>
 
-      <hr classname="h-px max-w-screen-xl bg-gray-200 border-0" />
+      <hr className="h-px max-w-screen-xl bg-gray-200 border-0" />
       <span className="my-8">
-        <H2>Your Goals</H2>
+        <span className="flex justify-between w-full">
+          <H2>Your Goals</H2>
+          <Button onClick={() => router.push("/create-goal")}>
+            Create Goal
+          </Button>
+        </span>
+
         <span className="grid mt-4 grid-cols-2 gap-2">
           <Card>
             <CardHeader>
@@ -57,11 +84,14 @@ const Dashboard = () => {
               <CardDescription>Staked amount: S$300</CardDescription>
               <span>
                 <Progress value={33} />
-                <span className="flex space-between">
-                  <P>19 Dec, 2025</P>
-                  <P>18 Jan, 2026</P>
+                <span className="flex w-full justify-between">
+                  <P className="text-slate-500 text-sm">19 Dec, 2025</P>
+                  <P className="text-slate-500 text-sm">18 Jan, 2026</P>
                 </span>
               </span>
+              <CardDescription>
+                Beneficiary: Singapore Cancer Society
+              </CardDescription>
             </CardHeader>
           </Card>
         </span>
