@@ -1,4 +1,3 @@
-import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/Button";
 import {
   Card,
@@ -11,7 +10,41 @@ import { Input } from "@/components/ui/Input";
 import { Label } from "@/components/ui/Label";
 import MainLayout from "@/components/layout/MainLayout";
 
+import { createClient } from "@/utils/supabase/component";
+import { useState } from "react";
+import { useRouter } from "next/router";
+import { useToast } from "@/hooks/use-toast";
+import { ToastAction } from "../ui/Toast";
+
 const Login = () => {
+  const supabase = createClient();
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [loading, setLoading] = useState(false);
+  const router = useRouter();
+  const { toast } = useToast();
+  const loginFn = async (e) => {
+    e.preventDefault();
+    setLoading(true);
+    const { error } = await supabase.auth.signInWithPassword({
+      email,
+      password
+    });
+    console.log(error);
+    setLoading(false);
+    if (error) {
+      console.error(error);
+      toast({
+        variant: "destructive",
+        title: "Uh oh! Something went wrong.",
+        description: "There was a problem with your request.",
+        action: <ToastAction altText="Try again">Try again</ToastAction>
+      });
+      return;
+    }
+    router.push("/");
+  };
+
   return (
     <MainLayout
       title="Login | LockedIn"
@@ -26,7 +59,7 @@ const Login = () => {
             </CardDescription>
           </CardHeader>
           <CardContent>
-            <form>
+            <form onSubmit={loginFn}>
               <div className="flex flex-col gap-6">
                 <div className="grid gap-2">
                   <Label htmlFor="email">Email</Label>
@@ -35,6 +68,8 @@ const Login = () => {
                     type="email"
                     placeholder="m@example.com"
                     required
+                    onChange={(e) => setEmail(e.target.value)}
+                    disabled={loading}
                   />
                 </div>
                 <div className="grid gap-2">
@@ -47,9 +82,16 @@ const Login = () => {
                       Forgot your password?
                     </a>
                   </div>
-                  <Input id="password" type="password" required />
+                  <Input
+                    id="password"
+                    type="password"
+                    required
+                    placeholder="Password"
+                    onChange={(e) => setPassword(e.target.value)}
+                    disabled={loading}
+                  />
                 </div>
-                <Button type="submit" className="w-full">
+                <Button type="submit" className="w-full" disabled={loading}>
                   Login
                 </Button>
               </div>

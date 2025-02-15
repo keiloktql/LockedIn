@@ -6,7 +6,7 @@ import {
   CardDescription,
   CardHeader,
   CardTitle
-} from "@/components/ui/card";
+} from "@/components/ui/Card";
 import { Button } from "../ui/Button";
 import Image from "next/image";
 import { Progress } from "../ui/Progress";
@@ -89,6 +89,9 @@ const Dashboard = () => {
                   <P className="text-slate-500 text-sm">18 Jan, 2026</P>
                 </span>
               </span>
+              <CardDescription>
+                Beneficiary: Singapore Cancer Society
+              </CardDescription>
             </CardHeader>
           </Card>
         </span>
