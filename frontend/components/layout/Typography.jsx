@@ -8,7 +8,7 @@ export const H1 = ({ children, className }) => (
 
 export const H2 = ({ children, className }) => (
   <h2
-    className={`scroll-m-20 text-3xl font-semibold tracking-tight first:mt-0 ${className}`}
+    className={`scroll-m-20 text-3xl font-bold tracking-tight first:mt-0 ${className}`}
   >
     {children}
   </h2>
