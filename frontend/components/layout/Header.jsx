@@ -10,6 +10,7 @@ import {
   PopoverTrigger
 } from "@/components/ui/Popover";
 import { useToast } from "@/hooks/use-toast";
+import Image from "next/image";
 
 const Header = () => {
   const router = useRouter();
@@ -39,7 +40,6 @@ const Header = () => {
     }
     router.replace("/");
   };
-  console.log(user);
 
   return (
     <header className="sticky left-0 top-0 z-50 h-20 w-full justify-center bg-[#ffffffb8] backdrop-blur-[20px] backdrop-saturate-[180%]">
@@ -47,7 +47,13 @@ const Header = () => {
         {/* 1280px */}
         <div className="w-full items-center flex">
           <Link className={`text-black text-xl font-bold`} href="/">
-            LockedIn
+            <Image
+              className="w-full h-[30px]"
+              src="/assets/logo.png"
+              width={250}
+              height={100}
+              alt="logo"
+            />
           </Link>
         </div>
         <nav className="w-full h-full justify-between items-center hidden md:flex">
