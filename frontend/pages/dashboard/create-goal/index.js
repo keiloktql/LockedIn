@@ -1,7 +1,10 @@
-import React from "react";
+import React, { useState } from "react";
+import { H1, H2, H3, P } from "@/components/layout/Typography";
 import { useForm, FormProvider, useFormContext } from "react-hook-form";
 import { Label } from "@/components/ui/Label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/Avatar";
+import { Checkbox } from "@/components/ui/checkbox";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -17,7 +20,6 @@ import {
   Card,
   CardContent,
   CardDescription,
-  CardFooter,
   CardHeader,
   CardTitle
 } from "@/components/ui/Card";
@@ -195,6 +197,7 @@ function Staking() {
 
   // Get the current value of 'recipientOfStakes'
   const recipientOfStakes = watch("recipientOfStakes");
+  const amountAtStake = watch("amountAtStake");
 
   return (
     <Card className="w-full">
@@ -250,25 +253,128 @@ function Staking() {
                   them who sent it.
                 </b>
               </div>
-              <div className="grid grid-cols-12">
+              <div className="grid grid-cols-12 mt-4">
+                <Label
+                  htmlFor="recipientOfStakes"
+                  className="col-span-4 text-left flex items-center"
+                >
+                  Pick an anti-charity:
+                </Label>
                 <Select>
-                  <SelectTrigger className="w-[180px]">
-                    <SelectValue placeholder="Select a fruit" />
+                  <SelectTrigger className="w-[360px]">
+                    <SelectValue placeholder="Please Choose" />
                   </SelectTrigger>
                   <SelectContent>
                     <SelectGroup>
-                      <SelectLabel>Fruits</SelectLabel>
-                      <SelectItem value="apple">Soccer </SelectItem>
-                      <SelectItem value="banana">Banana</SelectItem>
-                      <SelectItem value="blueberry">Blueberry</SelectItem>
-                      <SelectItem value="grapes">Grapes</SelectItem>
-                      <SelectItem value="pineapple">Pineapple</SelectItem>
+                      <SelectLabel>Please Choose</SelectLabel>
+                      <SelectItem
+                        value="Better Paperwork"
+                        category="Bureaucracy"
+                      >
+                        Bureaucracy: The Society for Better Paperwork
+                      </SelectItem>
+                      <SelectItem
+                        value="Unnecessary Meetings"
+                        category="Corporate Culture"
+                      >
+                        Corporate Culture: The Bureau of Unnecessary Meetings
+                      </SelectItem>
+                      <SelectItem
+                        value="Time Waster"
+                        category="Productivity Failures"
+                      >
+                        Productivity Failures: The National Time Waster Fund
+                      </SelectItem>
+                      <SelectItem
+                        value="Puddle Jumpers"
+                        category="Outdoor Annoyances"
+                      >
+                        Outdoor Annoyances: The Global Puddle Jumpers
+                        Association
+                      </SelectItem>
+                      <SelectItem value="Soggy Pizza" category="Food Disasters">
+                        Food Disasters: The Institute of Soggy Pizza
+                      </SelectItem>
+                      <SelectItem
+                        value="Silent Alarms"
+                        category="Technology Fails"
+                      >
+                        Technology Fails: The Silent Alarm Club
+                      </SelectItem>
+                      <SelectItem
+                        value="Slow Traffic"
+                        category="Transportation Issues"
+                      >
+                        Transportation Issues: The Extremely Slow Traffic
+                        Initiative
+                      </SelectItem>
+                      <SelectItem
+                        value="Oversized Sweaters"
+                        category="Fashion Fails"
+                      >
+                        Fashion Fails: The Global Oversized Sweater Fund
+                      </SelectItem>
+                      <SelectItem
+                        value="Unfollow Me"
+                        category="Social Media Trends"
+                      >
+                        Social Media Trends: The Unfollow Me Project
+                      </SelectItem>
+                      <SelectItem
+                        value="Lost Socks"
+                        category="Household Mysteries"
+                      >
+                        Household Mysteries: The Lost Socks Rescue Team
+                      </SelectItem>
                     </SelectGroup>
                   </SelectContent>
                 </Select>
               </div>
+              <H3 className="border-b mt-8">Amount at Stake be donated</H3>
             </div>
           )}
+        </div>
+        <div className="grid grid-cols-12 mt-8">
+          <Label
+            htmlFor="amountAtStake"
+            className="col-span-4 text-left flex items-center"
+          >
+            Amount at stake for each report:
+          </Label>
+          <Input
+            id="amountAtStake"
+            className="col-span-7"
+            {...register("amountAtStake")}
+          />
+        </div>
+
+        <div className="">
+          <br />
+          <br />
+          You will be billed <b>${amountAtStake}</b> for any reporting period
+          if:
+          <br />
+          1) You report that you were unsuccessful; or
+          <br />
+          2) Your Referee reports that you were unsuccessful; or
+          <br />
+          3) You fail to make a required report by the end of the second day
+          (11:59 P.M.) following a required reporting day.
+          <br />
+          <br />
+          All Forfeited Stakes will be sent to your designated recipient (e.g.
+          Charity, Friend or Foe).
+          <br />
+          <br />
+          <div className="flex items-center space-x-2">
+            <Checkbox id="terms" />
+            <label
+              htmlFor="terms"
+              className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+            >
+              Accept terms and conditions
+            </label>
+          </div>
         </div>
       </CardContent>
     </Card>
@@ -295,6 +401,7 @@ export function PaymentCompleteDialog({ open, onClose, onSubmit }) {
 }
 
 export default function Home() {
+  const [refereeEmail, setRefereeEmail] = useState([]);
   // Initialize the global form with default values
   const methods = useForm({
     defaultValues: {
@@ -303,7 +410,8 @@ export default function Home() {
       description: "",
       commitmentStartDate: "",
       commitmentEndDate: "",
-      recipientOfStakes: "Anti-Charity"
+      recipientOfStakes: "Anti-Charity",
+      amountAtStake: "00.00"
     }
   });
   const [openDialog, setOpenDialog] = React.useState(false);
@@ -359,24 +467,82 @@ export default function Home() {
                 </div>
                 <div className="col-span-1">
                   {/** An informational card (optional) */}
-                  <Card className="w-full">
-                    <CardHeader>
-                      <CardTitle>
-                        Set the Stakes
-                        <br />
-                        (money is optional)
-                      </CardTitle>
-                      <CardDescription>
-                        Put money on the line - people who do are up to 3 times
-                        as successful!
-                      </CardDescription>
-                    </CardHeader>
-                    <CardContent>
-                      <div>
-                        <h2 className="scroll-m-20 text-1xl font-extrabold tracking-tight lg:text-2xl">
-                          Set the Stakes (money is optional)
-                        </h2>
+                  <Card className="w-full flex flex-col">
+                    <CardContent className="flex flex-col items-center justify-between p-6 space-y-3 text-center">
+                      <div
+                        key={1}
+                        className="flex flex-col justify-start items-center space-y-2"
+                      >
+                        {/* Referee label */}
+                        <div className="flex items-center space-x-2 mt-4">
+                          {/* Person Logo */}
+                          <div className="w-12 h-12 rounded-full flex items-center justify-center text-white">
+                            <span className="text-xl">👤</span>
+                          </div>
+                          <H3 className="text-lg font-medium">Referee</H3>
+                        </div>
+
+                        {/* Invite friends message */}
+                        <div className="flex flex-row justify-between items-center space-x-2 w-full">
+                          <Input placeholder="Invite a friend" />
+                          <Button
+                            variant="outline"
+                            onClick={() =>
+                              setRefereeEmail([
+                                ...refereeEmail,
+                                "tkl48@gmail.com"
+                              ])
+                            }
+                          >
+                            Invite
+                          </Button>
+                        </div>
+
+                        {/* Referee email list */}
+                        <div className="flex flex-col space-y-2 w-full">
+                          <br />
+                          {refereeEmail.map((email) => (
+                            <div className="my-6 w-full overflow-y-auto">
+                              <table className="w-full">
+                                <thead>
+                                  <tr className="m-0 border-t p-0 even:bg-muted">
+                                    <th className="p-2">Email</th>
+                                    <th className="p-2">Status</th>
+                                    <th className="p-2">Actions</th>
+                                  </tr>
+                                </thead>
+                                <tbody>
+                                  <tr className="m-0 border-t p-0 even:bg-muted">
+                                    <td className="p-2">{email}</td>
+                                    <td className="p-2">Pending</td>
+                                    <td className="p-2">
+                                      <Button
+                                        variant="outline"
+                                        className="w-full"
+                                      >
+                                        Resend
+                                      </Button>
+                                      <br />
+                                      <Button
+                                        variant="destructive"
+                                        className="w-full"
+                                      >
+                                        Remove
+                                      </Button>
+                                    </td>
+                                  </tr>
+                                </tbody>
+                              </table>
+                            </div>
+                          ))}
+                        </div>
+
+                        <P className="text-sm text-gray-600 mt-2">
+                          This person will be your referee. They will verify if
+                          you have completed your goal.
+                        </P>
                       </div>
+                      <P className="text-sm text-gray-600 flex-1"></P>
                     </CardContent>
                   </Card>
                 </div>
