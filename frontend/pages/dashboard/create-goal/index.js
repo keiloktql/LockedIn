@@ -29,6 +29,7 @@ import {
 } from "@/components/ui/select";
 import { Input } from "@/components/ui/Input";
 import { Geist, Geist_Mono } from "next/font/google";
+import MainLayout from "@/components/layout/MainLayout";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -280,61 +281,63 @@ export default function Home() {
   }
 
   return (
-    <FormProvider {...methods}>
-      <div
-        className={`${geistSans.variable} ${geistMono.variable} grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]`}
-      >
-        <main className="flex flex-col gap-8 row-start-2 items-center sm:items-start">
-          <div>
-            <h1 className="scroll-m-20 text-4xl font-extrabold tracking-tight lg:text-5xl">
-              Custom Goal
-            </h1>
-            <h3 className="leading-7 [&:not(:first-child)]:mt-6">
-              Your privacy is important to us. You can
-              <a href="#"> adjust your privacy settings</a> once you’re done
-              creating your Commitment Contract.
-            </h3>
-          </div>
-          {/** Global Form wrapping GoalSelection and Staking */}
-          <form onSubmit={methods.handleSubmit(onSubmit)}>
-            <div className="grid grid-cols-3 gap-8">
-              <div className="col-span-2 space-y-5">
-                <GoalSelection />
-                <Staking />
-              </div>
-              <div className="col-span-1">
-                {/** An informational card (optional) */}
-                <Card className="w-full">
-                  <CardHeader>
-                    <CardTitle>
-                      Set the Stakes
-                      <br />
-                      (money is optional)
-                    </CardTitle>
-                    <CardDescription>
-                      Put money on the line - people who do are up to 3 times as
-                      successful!
-                    </CardDescription>
-                  </CardHeader>
-                  <CardContent>
-                    <div>
-                      <h2 className="scroll-m-20 text-1xl font-extrabold tracking-tight lg:text-2xl">
-                        Set the Stakes (money is optional)
-                      </h2>
-                    </div>
-                  </CardContent>
-                </Card>
-              </div>
+    <MainLayout title="Create Goal | LockedIn">
+      <FormProvider {...methods}>
+        <div
+          className={`${geistSans.variable} ${geistMono.variable} grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]`}
+        >
+          <main className="flex flex-col gap-8 row-start-2 items-center sm:items-start">
+            <div>
+              <h1 className="scroll-m-20 text-4xl font-extrabold tracking-tight lg:text-5xl">
+                Custom Goal
+              </h1>
+              <h3 className="leading-7 [&:not(:first-child)]:mt-6">
+                Your privacy is important to us. You can
+                <a href="#"> adjust your privacy settings</a> once you’re done
+                creating your Commitment Contract.
+              </h3>
             </div>
-            <span className="flex gap-2 mt-8">
-              <Button variant="outline" type="button">
-                Cancel
-              </Button>
-              <Button type="submit">Create Goal</Button>
-            </span>
-          </form>
-        </main>
-      </div>
-    </FormProvider>
+            {/** Global Form wrapping GoalSelection and Staking */}
+            <form onSubmit={methods.handleSubmit(onSubmit)}>
+              <div className="grid grid-cols-3 gap-8">
+                <div className="col-span-2 space-y-5">
+                  <GoalSelection />
+                  <Staking />
+                </div>
+                <div className="col-span-1">
+                  {/** An informational card (optional) */}
+                  <Card className="w-full">
+                    <CardHeader>
+                      <CardTitle>
+                        Set the Stakes
+                        <br />
+                        (money is optional)
+                      </CardTitle>
+                      <CardDescription>
+                        Put money on the line - people who do are up to 3 times
+                        as successful!
+                      </CardDescription>
+                    </CardHeader>
+                    <CardContent>
+                      <div>
+                        <h2 className="scroll-m-20 text-1xl font-extrabold tracking-tight lg:text-2xl">
+                          Set the Stakes (money is optional)
+                        </h2>
+                      </div>
+                    </CardContent>
+                  </Card>
+                </div>
+              </div>
+              <span className="flex gap-2 mt-8">
+                <Button variant="outline" type="button">
+                  Cancel
+                </Button>
+                <Button type="submit">Create Goal</Button>
+              </span>
+            </form>
+          </main>
+        </div>
+      </FormProvider>
+    </MainLayout>
   );
 }
