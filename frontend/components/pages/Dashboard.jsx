@@ -173,12 +173,19 @@ const Dashboard = () => {
             <Link key={index} href={`/dashboard/goal/${oneData.id}`}>
               <Card>
                 <CardHeader>
-                  <CardTitle>I will quit smoking</CardTitle>
+                  <CardTitle>{oneData.description}</CardTitle>
                   <CardDescription>
                     Staked amount: S${oneData.stake_amount}
                   </CardDescription>
                   <span>
-                    <Progress value={88} />
+                    <Progress
+                      value={
+                        ((new Date() - new Date(oneData?.start_date)) /
+                          (new Date(oneData?.end_date) -
+                            new Date(oneData?.start_date))) *
+                        100
+                      }
+                    />
                     <span className="flex w-full justify-between">
                       <P className="text-slate-500 text-sm">
                         {oneData.start_date}
