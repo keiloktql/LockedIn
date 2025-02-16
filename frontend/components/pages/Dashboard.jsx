@@ -50,7 +50,7 @@ const Dashboard = () => {
         <H2 className="text-indigo-700">S$5,031</H2>
         <p className="text-sm font-medium text-slate-300">Current Balance</p>
         <span className="flex gap-1">
-          <p className="text-xs font-bold text-green-800">+4.5%</p>
+          <p className="text-xs font-bold text-green-800">+0.52%</p>
           <p className="text-xs text-slate-400">this month</p>
         </span>
 
@@ -107,7 +107,7 @@ const Dashboard = () => {
           />
           <Stats
             title="P/L"
-            data="+46%"
+            data="+2.54%"
             textColor="text-green-700"
             icon={<Banknote className="h-6 w-6 text-[#e4e4e7]" />}
           />
@@ -133,7 +133,11 @@ const Dashboard = () => {
                 help smokers kick the habit and quit smoking and prevent the
                 public from picking up smoking
               </CardDescription>
-              <Button>More info</Button>
+              <Button
+                onClick={() => router.push("/dashboard/event/quit-smoking")}
+              >
+                More info
+              </Button>
             </CardHeader>
           </Card>
         </span>
@@ -155,16 +159,18 @@ const Dashboard = () => {
                 <CardTitle>I will quit smoking</CardTitle>
                 <CardDescription>Staked amount: S$300</CardDescription>
                 <span>
-                  <Progress value={33} />
+                  <Progress value={88} />
                   <span className="flex w-full justify-between">
-                    <P className="text-slate-500 text-sm">19 Dec, 2025</P>
-                    <P className="text-slate-500 text-sm">18 Jan, 2026</P>
+                    <P className="text-slate-500 text-sm">19 Dec, 2024</P>
+                    <P className="text-slate-500 text-sm">18 Jan, 2025</P>
                   </span>
                 </span>
                 <CardDescription>
                   Beneficiary: Singapore Cancer Society
                 </CardDescription>
-                <Badge className="w-fit">Completed</Badge>
+                <Badge variant="pending" className="w-fit">
+                  In progress
+                </Badge>
               </CardHeader>
             </Card>
           </Link>
