@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import MainLayout from "../layout/MainLayout";
 import { H2, P } from "../layout/Typography";
 import {
@@ -18,19 +18,18 @@ import { Badge } from "../ui/Badge";
 import { Area, AreaChart, CartesianGrid, XAxis } from "recharts";
 import {
   ChartContainer,
-  ChartLegend,
-  ChartLegendContent,
   ChartTooltip,
   ChartTooltipContent
 } from "@/components/ui/Chart";
+import { createClient } from "@/utils/supabase/component";
 
 const chartData = [
-  { month: "September", balance: 200.56 },
-  { month: "October", balance: 210.56 },
-  { month: "November", balance: 240.56 },
-  { month: "December", balance: 250.56 },
-  { month: "January", balance: 260.56 },
-  { month: "February", balance: 270.56 }
+  { month: "September", balance: 4002 },
+  { month: "October", balance: 4554 },
+  { month: "November", balance: 5088 },
+  { month: "December", balance: 6103.4 },
+  { month: "January", balance: 7110.2 },
+  { month: "February", balance: 8127 }
 ];
 const chartConfig = {
   balance: {
@@ -41,13 +40,30 @@ const chartConfig = {
 
 const Dashboard = () => {
   const router = useRouter();
+  const supabaseClient = createClient();
+  const [data, setData] = useState([]);
+  useEffect(() => {
+    (async () => {
+      const { data: data1, error: error1 } =
+        await supabaseClient.auth.getUser();
+      console.log(error1);
+      console.log(data1);
+      const { data: data2, error: error2 } = await supabaseClient
+        .from("goals")
+        .select()
+        .eq("user_id", data1.user.id)
+        .order("created_at", { ascending: false });
+      console.log(data2);
+      setData(data2);
+    })();
+  }, []);
   return (
     <MainLayout
       title="Dashboard | LockedIn"
       className="flex flex-col pb-20 max-w-screen-xl w-full mx-auto px-6 sm:px-16 bg-bg-hero bg-contain bg-no-repeat"
     >
       <span className="mb-4">
-        <H2 className="text-indigo-700">S$5,031</H2>
+        <H2 className="text-indigo-700">S$5,127</H2>
         <p className="text-sm font-medium text-slate-300">Current Balance</p>
         <span className="flex gap-1">
           <p className="text-xs font-bold text-green-800">+0.52%</p>
@@ -153,27 +169,35 @@ const Dashboard = () => {
         </span>
 
         <span className="grid mt-4 grid-cols-2 gap-2">
-          <Link href={`/dashboard/goal/123hihwfiuh78912y3`}>
-            <Card>
-              <CardHeader>
-                <CardTitle>I will quit smoking</CardTitle>
-                <CardDescription>Staked amount: S$300</CardDescription>
-                <span>
-                  <Progress value={88} />
-                  <span className="flex w-full justify-between">
-                    <P className="text-slate-500 text-sm">19 Dec, 2024</P>
-                    <P className="text-slate-500 text-sm">18 Jan, 2025</P>
+          {data.map((oneData, index) => (
+            <Link key={index} href={`/dashboard/goal/${oneData.id}`}>
+              <Card>
+                <CardHeader>
+                  <CardTitle>I will quit smoking</CardTitle>
+                  <CardDescription>
+                    Staked amount: S${oneData.stake_amount}
+                  </CardDescription>
+                  <span>
+                    <Progress value={88} />
+                    <span className="flex w-full justify-between">
+                      <P className="text-slate-500 text-sm">
+                        {oneData.start_date}
+                      </P>
+                      <P className="text-slate-500 text-sm">
+                        {oneData.end_date}
+                      </P>
+                    </span>
                   </span>
-                </span>
-                <CardDescription>
-                  Beneficiary: Singapore Cancer Society
-                </CardDescription>
-                <Badge variant="pending" className="w-fit">
-                  In progress
-                </Badge>
-              </CardHeader>
-            </Card>
-          </Link>
+                  <CardDescription>
+                    Beneficiary: {oneData.beneficiary}
+                  </CardDescription>
+                  <Badge variant="pending" className="w-fit">
+                    In progress
+                  </Badge>
+                </CardHeader>
+              </Card>
+            </Link>
+          ))}
         </span>
       </span>
     </MainLayout>
