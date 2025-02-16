@@ -14,8 +14,8 @@ import {
   AlertDialogFooter,
   AlertDialogHeader,
   AlertDialogTitle,
-  AlertDialogTrigger,
-} from "@/components/ui/alert-dialog"
+  AlertDialogTrigger
+} from "@/components/ui/alert-dialog";
 import {
   Card,
   CardContent,
@@ -344,6 +344,10 @@ function Staking() {
           <Input
             id="amountAtStake"
             className="col-span-7"
+            type="number"
+            step="0.01"
+            min="0"
+            max="1000000"
             {...register("amountAtStake")}
           />
         </div>
@@ -386,13 +390,18 @@ export function PaymentCompleteDialog({ open, onClose, onSubmit }) {
     <AlertDialog open={open}>
       <AlertDialogContent>
         <AlertDialogHeader>
-          <AlertDialogTitle className="text-black">Have you confirmed the payment?</AlertDialogTitle>
+          <AlertDialogTitle className="text-black">
+            Have you confirmed the payment?
+          </AlertDialogTitle>
           <AlertDialogDescription>
-            Please confirm the payment to complete the transaction in the new tab.
+            Please confirm the payment to complete the transaction in the new
+            tab.
           </AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>
-          <AlertDialogCancel onClick={onClose} className="text-black">No</AlertDialogCancel>
+          <AlertDialogCancel onClick={onClose} className="text-black">
+            No
+          </AlertDialogCancel>
           <AlertDialogAction onClick={onSubmit}>Yes</AlertDialogAction>
         </AlertDialogFooter>
       </AlertDialogContent>
@@ -405,27 +414,28 @@ export default function Home() {
   // Initialize the global form with default values
   const methods = useForm({
     defaultValues: {
-      name: "",
+      name: "I commit to Quit Smoking",
       commitmentFrequency: "Weekly",
-      description: "",
-      commitmentStartDate: "",
-      commitmentEndDate: "",
+      description: "I will not smoke a single cigarette for the next 90 days",
+      commitmentStartDate: "16/02/2025",
+      commitmentEndDate: "16/05/2025",
       recipientOfStakes: "Anti-Charity",
-      amountAtStake: "00.00"
+      amountAtStake: "89.23"
     }
   });
+  const amountAtStake = methods.watch("amountAtStake");
   const [openDialog, setOpenDialog] = React.useState(false);
   const [goalId, setGoalId] = React.useState("");
   async function onSubmit(data) {
     // axios post to api /api/goal
-    let jsonObj = {}
-    jsonObj["userId"] = "ec99f125-700f-4620-b8a2-eeca29ef21e1"
-    jsonObj["stackAmount"] = 100
-    jsonObj["description"] = data.description
-    jsonObj["startDate"] = data.commitmentStartDate
-    jsonObj["endDate"] = data.commitmentEndDate
-    jsonObj["beneficiary"] = data.recipientOfStakes
-    console.log(jsonObj)
+    let jsonObj = {};
+    jsonObj["userId"] = "ec99f125-700f-4620-b8a2-eeca29ef21e1";
+    jsonObj["stakeAmount"] = data.amountAtStake;
+    jsonObj["description"] = data.description;
+    jsonObj["startDate"] = data.commitmentStartDate;
+    jsonObj["endDate"] = data.commitmentEndDate;
+    jsonObj["beneficiary"] = data.recipientOfStakes;
+    console.log(jsonObj);
     const res = await fetch("/api/goal", {
       method: "POST",
       headers: {
@@ -436,9 +446,9 @@ export default function Home() {
     const responseData = await res.json();
     console.log("Submitted Data:", responseData);
     window.open(responseData.redirect_url);
-    console.log(responseData.goalId) 
-    setGoalId(responseData.goalId)
-    setOpenDialog(true)
+    console.log(responseData.goalId);
+    setGoalId(responseData.goalId);
+    setOpenDialog(true);
   }
 
   return (
@@ -557,16 +567,20 @@ export default function Home() {
           </main>
         </div>
       </FormProvider>
-      <PaymentCompleteDialog open={openDialog} onClose={() => setOpenDialog(false)} onSubmit={() => {
-        fetch(`/api/continue-grant?goalId=${goalId}`, {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json"
-          }
-        });
-        setOpenDialog(false);
-        window.location.href = "/dashboard";
-      }} />
+      <PaymentCompleteDialog
+        open={openDialog}
+        onClose={() => setOpenDialog(false)}
+        onSubmit={() => {
+          fetch(`/api/continue-grant?goalId=${goalId}`, {
+            method: "GET",
+            headers: {
+              "Content-Type": "application/json"
+            }
+          });
+          setOpenDialog(false);
+          window.location.href = "/dashboard";
+        }}
+      />
     </MainLayout>
   );
 }

@@ -8,7 +8,7 @@ export default async function handler(req, res) {
     return res.status(405).json({ error: 'Method not allowed' });
   }
 
-  const { userId, stackAmount, description, startDate, endDate, beneficiary } = req.body;
+  const { userId, stakeAmount, description, startDate, endDate, beneficiary } = req.body;
 
   const db = getDb();
 
@@ -66,7 +66,7 @@ export default async function handler(req, res) {
       incomingAmount: {
         assetCode: receivingWalletAddress.assetCode,
         assetScale: receivingWalletAddress.assetScale,
-        value: (stackAmount * 100).toString(),
+        value: (stakeAmount * 100).toString(),
       },
     }
   );
@@ -151,14 +151,14 @@ export default async function handler(req, res) {
     outgoingPaymentGrant, nonce
   );
 
-  if (!userId || !stackAmount || !description || !startDate || !endDate || !beneficiary) {
+  if (!userId || !stakeAmount || !description || !startDate || !endDate || !beneficiary) {
     return res.status(400).json({ error: 'Missing required fields' });
   }
 
   try {
     const goal = await db.insert(goals).values({
       userId,
-      stackAmount,
+      stakeAmount,
       description,
       startDate,
       endDate,
