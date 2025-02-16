@@ -3,6 +3,17 @@ import { useForm, FormProvider, useFormContext } from "react-hook-form";
 import { Label } from "@/components/ui/Label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog"
+import {
   Card,
   CardContent,
   CardDescription,
@@ -30,6 +41,7 @@ import {
 import { Input } from "@/components/ui/Input";
 import { Geist, Geist_Mono } from "next/font/google";
 import MainLayout from "@/components/layout/MainLayout";
+import { json } from "drizzle-orm/mysql-core";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -263,6 +275,25 @@ function Staking() {
   );
 }
 
+export function PaymentCompleteDialog({ open, onClose, onSubmit }) {
+  return (
+    <AlertDialog open={open}>
+      <AlertDialogContent>
+        <AlertDialogHeader>
+          <AlertDialogTitle className="text-black">Have you confirmed the payment?</AlertDialogTitle>
+          <AlertDialogDescription>
+            Please confirm the payment to complete the transaction in the new tab.
+          </AlertDialogDescription>
+        </AlertDialogHeader>
+        <AlertDialogFooter>
+          <AlertDialogCancel onClick={onClose} className="text-black">No</AlertDialogCancel>
+          <AlertDialogAction onClick={onSubmit}>Yes</AlertDialogAction>
+        </AlertDialogFooter>
+      </AlertDialogContent>
+    </AlertDialog>
+  );
+}
+
 export default function Home() {
   // Initialize the global form with default values
   const methods = useForm({
@@ -275,9 +306,31 @@ export default function Home() {
       recipientOfStakes: "Anti-Charity"
     }
   });
-
-  function onSubmit(data) {
-    console.log("Submitted Data:", data);
+  const [openDialog, setOpenDialog] = React.useState(false);
+  const [goalId, setGoalId] = React.useState("");
+  async function onSubmit(data) {
+    // axios post to api /api/goal
+    let jsonObj = {}
+    jsonObj["userId"] = "ec99f125-700f-4620-b8a2-eeca29ef21e1"
+    jsonObj["stackAmount"] = 100
+    jsonObj["description"] = data.description
+    jsonObj["startDate"] = data.commitmentStartDate
+    jsonObj["endDate"] = data.commitmentEndDate
+    jsonObj["beneficiary"] = data.recipientOfStakes
+    console.log(jsonObj)
+    const res = await fetch("/api/goal", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify(jsonObj)
+    });
+    const responseData = await res.json();
+    console.log("Submitted Data:", responseData);
+    window.open(responseData.redirect_url);
+    console.log(responseData.goalId) 
+    setGoalId(responseData.goalId)
+    setOpenDialog(true)
   }
 
   return (
@@ -338,6 +391,16 @@ export default function Home() {
           </main>
         </div>
       </FormProvider>
+      <PaymentCompleteDialog open={openDialog} onClose={() => setOpenDialog(false)} onSubmit={() => {
+        fetch(`/api/continue-grant?goalId=${goalId}`, {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json"
+          }
+        });
+        setOpenDialog(false);
+        window.location.href = "/dashboard";
+      }} />
     </MainLayout>
   );
 }

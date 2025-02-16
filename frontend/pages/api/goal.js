@@ -167,9 +167,9 @@ export default async function handler(req, res) {
       accessToken: outgoingPaymentGrant.continue.access_token.value,
       continueUrl: outgoingPaymentGrant.continue.uri,
       quoteId: quote.id
-    });
+    }).returning();
 
-    return res.status(201).json({ message: 'Goal created successfully', redirect_url: outgoingPaymentGrant.interact.redirect });
+    return res.status(201).json({ message: 'Goal created successfully', goalId: goal[0].id, redirect_url: outgoingPaymentGrant.interact.redirect });
   } catch (error) {
     console.error(error);
     return res.status(500).json({ error: 'Internal server error' });
